@@ -22,8 +22,10 @@ public class ProductDTO {
   private UUID categoryId;
   private UUID categoryTypeId;
   private String categoryName;
+  private String thumbnail;
   private String categoryTypeName;
   private List<ProductVariantDTO> variants;
   private List<ProductResourceDTO> productResources;
   private Float rating;
+  private String slug;
 }

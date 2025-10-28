@@ -55,6 +55,9 @@ public class Product {
   @Column(nullable = false)
   private boolean isNewArrival;
 
+  @Column( unique = true)
+  private String slug;
+
   @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
   private List<ProductVariant> productVariants;
 
