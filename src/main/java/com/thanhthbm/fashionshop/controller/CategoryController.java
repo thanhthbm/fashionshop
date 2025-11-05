@@ -32,7 +32,7 @@ public class CategoryController {
 
 
   @GetMapping("/{id}")
-  public ResponseEntity<Category> getCategoryById(@RequestParam(value = "id", required = true) UUID id) {
+  public ResponseEntity<Category> getCategoryById(@RequestParam(value = "id") UUID id) {
     Category category = this.categoryService.getCategory(id);
     return ResponseEntity.ok().body(category);
   }
@@ -56,7 +56,7 @@ public class CategoryController {
   }
 
   @DeleteMapping("/{id}")
-  public ResponseEntity<Void> deleteCategory(@PathVariable(value = "id", required = true) UUID categoryId) {
+  public ResponseEntity<Void> deleteCategory(@PathVariable(value = "id") UUID categoryId) {
     categoryService.deleteCategory(categoryId);
     return new ResponseEntity<>(HttpStatus.OK);
   }
