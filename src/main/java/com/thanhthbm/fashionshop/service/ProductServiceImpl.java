@@ -88,5 +88,9 @@ public class ProductServiceImpl implements ProductService {
     return productRepository.save(productMapper.mapToProductEntity(productDTO));
   }
 
+  @Override
+  public Product fetchProductById(UUID id) {
+    return productRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Product not found"));
+  }
 
 }

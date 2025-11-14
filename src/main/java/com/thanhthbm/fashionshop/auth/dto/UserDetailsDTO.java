@@ -1,5 +1,7 @@
 package com.thanhthbm.fashionshop.auth.dto;
 
+import com.thanhthbm.fashionshop.entity.Address;
+import java.util.List;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,4 +19,5 @@ public class UserDetailsDTO {
   private String phoneNumber;
   private String email;
   private Object authorityList;
+  private List<Address> addressList;
 }

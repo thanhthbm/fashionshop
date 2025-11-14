@@ -14,4 +14,6 @@ public interface ProductService {
   ProductDTO getProductById(UUID id);
 
   Product updateProduct(ProductDTO productDTO);
+
+  Product fetchProductById(UUID id);
 }

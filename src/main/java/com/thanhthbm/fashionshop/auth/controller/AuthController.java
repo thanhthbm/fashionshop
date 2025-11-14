@@ -45,12 +45,17 @@ public class AuthController {
           loginRequest.getUsername(),
           loginRequest.getPassword()
       );
-      Authentication authenticationResponse = this.authenticationManager.authenticate(authentication);
+      Authentication authenticationResponse = null;
+      try {
+         authenticationResponse = this.authenticationManager.authenticate(authentication);
+      } catch (Exception ex){
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+      }
 
       if (authenticationResponse.isAuthenticated()) {
         User user = (User) authenticationResponse.getPrincipal();
         if (!user.isEnabled()) {
-          return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+          return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
         //tao jwt token
         String token = jwtTokenHelper.generateToken(user.getEmail());

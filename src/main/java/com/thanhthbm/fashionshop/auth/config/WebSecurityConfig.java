@@ -35,7 +35,8 @@ public class WebSecurityConfig {
 
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-    http.authorizeHttpRequests((authorized) -> authorized
+    http.csrf((csrf) -> csrf.disable())
+        .authorizeHttpRequests((authorized) -> authorized
         .requestMatchers("/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**").permitAll()
         .requestMatchers(HttpMethod.GET, "/api/products", "/api/category").permitAll()
             .requestMatchers("/oauth2/success").permitAll()
