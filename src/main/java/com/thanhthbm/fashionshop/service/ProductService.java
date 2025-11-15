@@ -1,19 +1,25 @@
 package com.thanhthbm.fashionshop.service;
 
 import com.thanhthbm.fashionshop.dto.ProductDTO;
+import com.thanhthbm.fashionshop.dto.ProductRequest;
+import com.thanhthbm.fashionshop.dto.ResultPaginationDTO;
 import com.thanhthbm.fashionshop.entity.Product;
 import java.util.List;
 import java.util.UUID;
+import org.springframework.data.domain.Pageable;
 
 public interface ProductService {
   public Product addProduct(ProductDTO product);
-  public List<ProductDTO> getAllProducts(UUID categoryId, UUID categoryTypeId);
+  ResultPaginationDTO getAllProducts(ProductRequest productRequest);
 
-  ProductDTO getProductBySlug(String slug);
+  ProductDTO getProductBySlug(String slug, Pageable pageable);
 
   ProductDTO getProductById(UUID id);
 
   Product updateProduct(ProductDTO productDTO);
 
   Product fetchProductById(UUID id);
+
+  List<ProductDTO> getAllNewProducts(Boolean isNewArrival);
+
 }

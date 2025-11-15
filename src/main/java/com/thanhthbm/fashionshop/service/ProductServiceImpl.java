@@ -1,6 +1,9 @@
 package com.thanhthbm.fashionshop.service;
 
 import com.thanhthbm.fashionshop.dto.ProductDTO;
+import com.thanhthbm.fashionshop.dto.ProductRequest;
+import com.thanhthbm.fashionshop.dto.ResultPaginationDTO;
+import com.thanhthbm.fashionshop.dto.ResultPaginationDTO.Meta;
 import com.thanhthbm.fashionshop.entity.Product;
 import com.thanhthbm.fashionshop.exception.ResourceNotFoundException;
 import com.thanhthbm.fashionshop.mapper.ProductMapper;
@@ -9,6 +12,8 @@ import com.thanhthbm.fashionshop.specification.ProductSpecification;
 import java.util.List;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -29,23 +34,38 @@ public class ProductServiceImpl implements ProductService {
   }
 
   @Override
-  public List<ProductDTO> getAllProducts(UUID categoryId, UUID categoryTypeId) {
+  public ResultPaginationDTO getAllProducts(ProductRequest productRequest) {
     Specification<Product> productSpecification = Specification.allOf();
 
-    if (null != categoryId) {
-      productSpecification = productSpecification.and(ProductSpecification.hasCategoryId(categoryId));
+    if (null != productRequest.getCategoryId()) {
+      productSpecification = productSpecification.and(ProductSpecification.hasCategoryId(productRequest.getCategoryId()));
     }
-    if (null != categoryTypeId) {
-      productSpecification = productSpecification.and(ProductSpecification.hasCategoryTypeId(categoryTypeId));
+    if (null != productRequest.getCategoryTypeId()) {
+      productSpecification = productSpecification.and(ProductSpecification.hasCategoryTypeId(productRequest.getCategoryTypeId()));
+    }
+    if (null != productRequest.getIsNewArrival()){
+      productSpecification = productSpecification.and(ProductSpecification.hasNewArrival(productRequest.getIsNewArrival()));
     }
 
-    List<Product> products = productRepository.findAll(productSpecification);
-    List<ProductDTO> productDTOS = productMapper.getProductDTOs(products);
-    return productDTOS;
+    Page<Product> products = productRepository.findAll(productSpecification, productRequest.getPageable());
+    List<ProductDTO> productDTOS = productMapper.getProductDTOs(products.getContent());
+
+    ResultPaginationDTO resultPaginationDTO = ResultPaginationDTO.builder()
+        .meta(
+            Meta.builder()
+                .page(productRequest.getPageable().getPageNumber() + 1)
+                .pageSize(productRequest.getPageable().getPageSize())
+                .pages(products.getTotalPages())
+                .total(products.getTotalElements())
+            .build()
+        )
+        .result(productDTOS)
+        .build();
+    return resultPaginationDTO;
   }
 
   @Override
-  public ProductDTO getProductBySlug(String slug) {
+  public ProductDTO getProductBySlug(String slug, Pageable pageable) {
     Product product = productRepository.findBySlug(slug);
 
     if (null == product) {
@@ -68,9 +88,14 @@ public class ProductServiceImpl implements ProductService {
     if (null == product) {
       throw new ResourceNotFoundException("Product not found");
     }
+
+
+
     ProductDTO productDTO = productMapper.mapProductToDTO(product);
     productDTO.setCategoryId(product.getCategory().getId());
     productDTO.setCategoryTypeId(product.getCategoryType().getId());
+    productDTO.setCategoryName(product.getCategory().getName());
+    productDTO.setCategoryTypeName(product.getCategoryType().getName());
     productDTO.setVariants(productMapper.mapProductVariantListToDTO(product.getProductVariants()));
     productDTO.setProductResources(productMapper.mapProductResourcesListToDTO(product.getResources()));
 
@@ -91,6 +116,15 @@ public class ProductServiceImpl implements ProductService {
   @Override
   public Product fetchProductById(UUID id) {
     return productRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Product not found"));
+  }
+
+  @Override
+  public List<ProductDTO> getAllNewProducts(Boolean isNewArrival) {
+    List<Product> product =  this.productRepository.findByIsNewArrival(true);
+
+    List<ProductDTO> productDTOS = productMapper.getProductDTOs(product);
+    return productDTOS;
+
   }
 
 }

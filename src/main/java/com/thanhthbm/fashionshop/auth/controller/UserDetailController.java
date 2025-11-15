@@ -3,6 +3,7 @@ package com.thanhthbm.fashionshop.auth.controller;
 import com.thanhthbm.fashionshop.auth.dto.UserDetailsDTO;
 import com.thanhthbm.fashionshop.auth.entity.User;
 import com.thanhthbm.fashionshop.auth.service.CustomUserDetailService;
+import com.thanhthbm.fashionshop.dto.ApiResponse;
 import java.security.Principal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,7 +21,7 @@ public class UserDetailController {
   private CustomUserDetailService customUserDetailService;
 
   @GetMapping("/profile")
-  public ResponseEntity<UserDetailsDTO> getUserProfile(Principal principal) {
+  public ResponseEntity<ApiResponse<UserDetailsDTO>> getUserProfile(Principal principal) {
     User user = (User) customUserDetailService.loadUserByUsername(principal.getName());
 
     if (null == user) {
@@ -36,6 +37,6 @@ public class UserDetailController {
         .authorityList(user.getAuthorities().toArray())
         .addressList(user.getAddressList())
         .build();
-    return ResponseEntity.ok(userDetailsDTO);
+    return new ResponseEntity(ApiResponse.success(userDetailsDTO), HttpStatus.OK);
   }
 }

@@ -2,6 +2,7 @@ package com.thanhthbm.fashionshop.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.thanhthbm.fashionshop.auth.entity.User;
+import com.thanhthbm.fashionshop.constant.OrderStatus;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

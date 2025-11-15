@@ -53,7 +53,7 @@ public class Product {
   private Float rating;
 
   @Column(nullable = false)
-  private boolean isNewArrival;
+  private Boolean isNewArrival;
 
   @Column( unique = true)
   private String slug;

@@ -1,5 +1,6 @@
 package com.thanhthbm.fashionshop.controller;
 
+import com.thanhthbm.fashionshop.dto.ApiResponse;
 import com.thanhthbm.fashionshop.dto.OrderRequest;
 import com.thanhthbm.fashionshop.dto.OrderResponse;
 import com.thanhthbm.fashionshop.entity.Order;
@@ -22,10 +23,10 @@ public class OrderController {
   private OrderService orderService;
 
   @PostMapping
-  public ResponseEntity<OrderResponse> createOrder(@RequestBody OrderRequest orderRequest, Principal principal)
+  public ResponseEntity<ApiResponse<OrderResponse>> createOrder(@RequestBody OrderRequest orderRequest, Principal principal)
       throws Exception {
     OrderResponse orderResponse = orderService.createOrder(orderRequest, principal);
 
-    return new ResponseEntity<>(orderResponse, HttpStatus.OK);
+    return new ResponseEntity<>(ApiResponse.success(orderResponse), HttpStatus.OK);
   }
 }

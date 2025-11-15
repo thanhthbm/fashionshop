@@ -1,4 +1,4 @@
-package com.thanhthbm.fashionshop.entity;
+package com.thanhthbm.fashionshop.constant;
 
 public enum OrderStatus {
   PENDING,

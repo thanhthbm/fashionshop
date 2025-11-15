@@ -1,5 +1,6 @@
 package com.thanhthbm.fashionshop.controller;
 
+import com.thanhthbm.fashionshop.dto.ApiResponse;
 import com.thanhthbm.fashionshop.dto.CategoryDTO;
 import com.thanhthbm.fashionshop.entity.Category;
 import com.thanhthbm.fashionshop.service.CategoryService;
@@ -21,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/category")
-@CrossOrigin
+@CrossOrigin(origins = "http://localhost:3000")
 public class CategoryController {
   private final CategoryService categoryService;
 
@@ -32,33 +33,33 @@ public class CategoryController {
 
 
   @GetMapping("/{id}")
-  public ResponseEntity<Category> getCategoryById(@RequestParam(value = "id") UUID id) {
+  public ResponseEntity<ApiResponse<Category>> getCategoryById(@RequestParam(value = "id") UUID id) {
     Category category = this.categoryService.getCategory(id);
-    return ResponseEntity.ok().body(category);
+    return ResponseEntity.ok().body(ApiResponse.success(category));
   }
 
   @PostMapping
-  public ResponseEntity<Category> createCategory(@RequestBody CategoryDTO categoryDTO) {
+  public ResponseEntity<ApiResponse<Category>> createCategory(@RequestBody CategoryDTO categoryDTO) {
     Category category = this.categoryService.createCategory(categoryDTO);
-    return new ResponseEntity<>(category, HttpStatus.CREATED);
+    return new ResponseEntity<>(ApiResponse.created(category), HttpStatus.CREATED);
   }
 
   @GetMapping
-  public ResponseEntity<List<Category>> getAllCategories() {
+  public ResponseEntity<ApiResponse<List<Category>>> getAllCategories() {
     List<Category> categories = categoryService.getAllCategories();
-    return new ResponseEntity<>(categories, HttpStatus.OK);
+    return new ResponseEntity<>(ApiResponse.success(categories), HttpStatus.OK);
   }
 
   @PutMapping("/{id}")
-  public ResponseEntity<Category> updateCategory(@PathVariable(value = "id") UUID categoryId, @RequestBody CategoryDTO categoryDTO) {
+  public ResponseEntity<ApiResponse<Category>> updateCategory(@PathVariable(value = "id") UUID categoryId, @RequestBody CategoryDTO categoryDTO) {
     Category category = categoryService.updateCategory(categoryDTO, categoryId);
-    return new ResponseEntity<>(category, HttpStatus.OK);
+    return new ResponseEntity<>(ApiResponse.success(category), HttpStatus.OK);
   }
 
   @DeleteMapping("/{id}")
-  public ResponseEntity<Void> deleteCategory(@PathVariable(value = "id") UUID categoryId) {
+  public ResponseEntity<ApiResponse<Void>> deleteCategory(@PathVariable(value = "id") UUID categoryId) {
     categoryService.deleteCategory(categoryId);
-    return new ResponseEntity<>(HttpStatus.OK);
+    return new ResponseEntity<>(ApiResponse.success(null), HttpStatus.OK);
   }
 
 }

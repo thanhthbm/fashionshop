@@ -7,6 +7,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ServerErrorException;
 
 @Service
 public class EmailService {
@@ -17,7 +18,7 @@ public class EmailService {
   private String sender;
 
   @Async
-  public String sendMail(User user) {
+  public void sendMail(User user) {
     String subject = "Verify your email";
     String senderName = "FashionShop";
     String mailContent = "Hello" + user.getUsername() + ",\n";
@@ -37,9 +38,8 @@ public class EmailService {
       mailSender.send(message);
 
     } catch (Exception e) {
-      return e.getMessage();
+      throw new ServerErrorException("Error sending email", null);
     }
 
-    return "Message sent";
   }
 }

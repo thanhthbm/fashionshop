@@ -1,6 +1,7 @@
 package com.thanhthbm.fashionshop.controller;
 
 import com.thanhthbm.fashionshop.dto.AddressRequest;
+import com.thanhthbm.fashionshop.dto.ApiResponse;
 import com.thanhthbm.fashionshop.entity.Address;
 import com.thanhthbm.fashionshop.service.AddressService;
 import java.security.Principal;
@@ -19,8 +20,8 @@ public class AddressController {
   private AddressService addressService;
 
   @PostMapping
-  public ResponseEntity<Address> createAddress(@RequestBody AddressRequest addressRequest, Principal principal) {
-    return  ResponseEntity.ok(addressService.createAddress(addressRequest, principal));
+  public ResponseEntity<ApiResponse<Address>> createAddress(@RequestBody AddressRequest addressRequest, Principal principal) {
+    return  ResponseEntity.ok(ApiResponse.created(addressService.createAddress(addressRequest, principal)));
   }
 
 }

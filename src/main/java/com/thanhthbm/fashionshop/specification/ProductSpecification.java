@@ -12,4 +12,8 @@ public class ProductSpecification {
   public static Specification<Product> hasCategoryTypeId(UUID categoryTypeId) {
     return ((root, query, criteriaBuilder) ->  criteriaBuilder.equal(root.get("categoryType").get("id"), categoryTypeId));
   }
+
+  public static Specification<Product> hasNewArrival(Boolean isNewArrival) {
+    return (root, criteriaQuery, criteriaBuilder) -> criteriaBuilder.equal(root.get("isNewArrival"), isNewArrival);
+  }
 }

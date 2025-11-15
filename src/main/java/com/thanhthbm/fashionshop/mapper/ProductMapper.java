@@ -31,7 +31,7 @@ public class ProductMapper {
     product.setPrice(productDTO.getPrice());
     product.setDescription(productDTO.getDescription());
     product.setBrand(productDTO.getBrand());
-    product.setNewArrival(productDTO.isNewArrival());
+    product.setIsNewArrival(productDTO.isNewArrival());
     product.setRating(productDTO.getRating());
     product.setSlug(productDTO.getSlug());
 
@@ -101,8 +101,12 @@ public class ProductMapper {
         .price(product.getPrice())
         .description(product.getDescription())
         .brand(product.getBrand())
-        .isNewArrival(product.isNewArrival())
+        .isNewArrival(product.getIsNewArrival())
         .rating(product.getRating())
+        .categoryId(product.getCategory().getId())
+        .categoryName(product.getCategory().getName())
+        .categoryTypeId(product.getCategoryType().getId())
+        .categoryTypeName(product.getCategoryType().getName())
         .thumbnail(getProductThumbnail(product.getResources()))
         .slug(product.getSlug())
         .build();

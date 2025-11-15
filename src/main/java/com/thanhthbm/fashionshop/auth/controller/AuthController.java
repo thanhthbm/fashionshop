@@ -8,12 +8,14 @@ import com.thanhthbm.fashionshop.auth.dto.UserToken;
 import com.thanhthbm.fashionshop.auth.entity.User;
 import com.thanhthbm.fashionshop.auth.service.CustomUserDetailService;
 import com.thanhthbm.fashionshop.auth.service.RegistrationService;
+import com.thanhthbm.fashionshop.dto.ApiResponse;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -39,50 +41,54 @@ public class AuthController {
   private JwtTokenHelper jwtTokenHelper;
 
   @PostMapping("/login")
-  public ResponseEntity<UserToken> login(@RequestBody LoginRequest loginRequest ) {
-    try{
-      Authentication authentication= UsernamePasswordAuthenticationToken.unauthenticated(
-          loginRequest.getUsername(),
-          loginRequest.getPassword()
+  public ResponseEntity<ApiResponse<UserToken>> login(@RequestBody LoginRequest loginRequest ) {
+    try {
+      Authentication authentication = authenticationManager.authenticate(
+          UsernamePasswordAuthenticationToken.unauthenticated(
+              loginRequest.getUsername(),
+              loginRequest.getPassword()
+          )
       );
-      Authentication authenticationResponse = null;
-      try {
-         authenticationResponse = this.authenticationManager.authenticate(authentication);
-      } catch (Exception ex){
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-      }
 
-      if (authenticationResponse.isAuthenticated()) {
-        User user = (User) authenticationResponse.getPrincipal();
-        if (!user.isEnabled()) {
-          return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
-        //tao jwt token
-        String token = jwtTokenHelper.generateToken(user.getEmail());
+      User user = (User) authentication.getPrincipal();
+      String token = jwtTokenHelper.generateToken(user.getEmail());
 
+      UserToken userToken = UserToken.builder()
+          .token(token)
+          .build();
 
-        UserToken userToken = UserToken.builder()
-            .token(token)
-            .build();
-        return ResponseEntity.ok(userToken);
-      }
+      return ResponseEntity.ok(ApiResponse.success(userToken, "Login successful"));
 
-    } catch (BadCredentialsException e){
-      return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+    } catch (BadCredentialsException e) {
+      return new ResponseEntity<>(
+          ApiResponse.fail(HttpStatus.UNAUTHORIZED.value(), "Invalid username or password"),
+          HttpStatus.UNAUTHORIZED
+      );
+    } catch (DisabledException e) {
+      return new ResponseEntity<>(
+          ApiResponse.fail(HttpStatus.BAD_REQUEST.value(), "User is not verified. Please check your email."),
+          HttpStatus.BAD_REQUEST
+      );
+    } catch (Exception e) {
+      return new ResponseEntity<>(
+          ApiResponse.error(HttpStatus.INTERNAL_SERVER_ERROR.value(), "An unexpected error occurred: " + e.getMessage()),
+          HttpStatus.INTERNAL_SERVER_ERROR
+      );
     }
-
-    return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
   }
 
   @PostMapping("/register")
-  public ResponseEntity<RegistrationResponse> register(@RequestBody RegistrationRequest registrationRequest) {
+  public ResponseEntity<ApiResponse<RegistrationResponse>> register(@RequestBody RegistrationRequest registrationRequest) {
     RegistrationResponse registrationResponse = registrationService.createUser(registrationRequest);
 
-    return new ResponseEntity<>(registrationResponse, registrationResponse.getCode() == 200 ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
+    if (registrationResponse.getCode() == 200) {
+      return ResponseEntity.ok(ApiResponse.success(registrationResponse));
+    }
+    return new ResponseEntity<>(ApiResponse.fail(registrationResponse.getCode(), registrationResponse.getMessage()), HttpStatus.BAD_REQUEST);
   }
 
   @PostMapping("/verify")
-  public ResponseEntity<?> verifyCode(@RequestBody Map<String, String> map){
+  public ResponseEntity<ApiResponse<?>> verifyCode(@RequestBody Map<String, String> map){
     String username = map.get("username");
     String code = map.get("code");
 
@@ -90,9 +96,9 @@ public class AuthController {
 
     if (null != user && user.getVerificationCode().equals(code)) {
       registrationService.verifyUser(username);
-      return ResponseEntity.ok().build();
+      return ResponseEntity.ok(ApiResponse.success(null));
     }
-    return ResponseEntity.badRequest().build();
+    return new ResponseEntity(ApiResponse.fail(400, "Invalid code"), HttpStatus.BAD_REQUEST);
   }
 
 }
