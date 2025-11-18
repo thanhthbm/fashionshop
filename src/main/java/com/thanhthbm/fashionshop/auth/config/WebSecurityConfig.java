@@ -52,7 +52,7 @@ public class WebSecurityConfig {
               }
             })
         )
-        .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+        .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
         .addFilterBefore(new JwtAuthenticationFilter(userDetailsService, jwtTokenHelper),
             org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter.class);
 
