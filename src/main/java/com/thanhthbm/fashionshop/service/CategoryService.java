@@ -12,6 +12,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -54,8 +55,8 @@ public class CategoryService {
     }).collect(Collectors.toList());
   }
 
-  public List<Category> getAllCategories() {
-    return  categoryRepository.findAll();
+  public List<Category> getAllCategories(Specification<Category> specification) {
+    return categoryRepository.findAll(specification);
   }
 
   public Category updateCategory(CategoryDTO categoryDto, UUID categoryId) {

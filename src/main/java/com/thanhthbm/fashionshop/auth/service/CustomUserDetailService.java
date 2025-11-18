@@ -15,7 +15,6 @@ public class CustomUserDetailService implements UserDetailsService {
   private UserDetailRepository userDetailRepository;
 
 
-
   @Override
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
     User user = userDetailRepository.findByEmail(username);
@@ -25,5 +24,9 @@ public class CustomUserDetailService implements UserDetailsService {
     }
 
     return user;
+  }
+
+  public User handleUpdateUser(User user) {
+    return userDetailRepository.save(user);
   }
 }

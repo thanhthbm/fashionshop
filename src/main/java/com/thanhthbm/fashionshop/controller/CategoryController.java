@@ -4,9 +4,11 @@ import com.thanhthbm.fashionshop.dto.ApiResponse;
 import com.thanhthbm.fashionshop.dto.CategoryDTO;
 import com.thanhthbm.fashionshop.entity.Category;
 import com.thanhthbm.fashionshop.service.CategoryService;
+import com.turkraft.springfilter.boot.Filter;
 import java.util.List;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -22,7 +24,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/category")
-@CrossOrigin(origins = "http://localhost:3000")
 public class CategoryController {
   private final CategoryService categoryService;
 
@@ -45,8 +46,10 @@ public class CategoryController {
   }
 
   @GetMapping
-  public ResponseEntity<ApiResponse<List<Category>>> getAllCategories() {
-    List<Category> categories = categoryService.getAllCategories();
+  public ResponseEntity<ApiResponse<List<Category>>> getAllCategories(
+      @Filter Specification<Category> specification
+  ) {
+    List<Category> categories = categoryService.getAllCategories(specification);
     return new ResponseEntity<>(ApiResponse.success(categories), HttpStatus.OK);
   }
 

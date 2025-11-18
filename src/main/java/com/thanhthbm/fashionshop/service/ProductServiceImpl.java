@@ -34,27 +34,16 @@ public class ProductServiceImpl implements ProductService {
   }
 
   @Override
-  public ResultPaginationDTO getAllProducts(ProductRequest productRequest) {
-    Specification<Product> productSpecification = Specification.allOf();
+  public ResultPaginationDTO getAllProducts(Specification<Product> spec, Pageable pageable) {
 
-    if (null != productRequest.getCategoryId()) {
-      productSpecification = productSpecification.and(ProductSpecification.hasCategoryId(productRequest.getCategoryId()));
-    }
-    if (null != productRequest.getCategoryTypeId()) {
-      productSpecification = productSpecification.and(ProductSpecification.hasCategoryTypeId(productRequest.getCategoryTypeId()));
-    }
-    if (null != productRequest.getIsNewArrival()){
-      productSpecification = productSpecification.and(ProductSpecification.hasNewArrival(productRequest.getIsNewArrival()));
-    }
-
-    Page<Product> products = productRepository.findAll(productSpecification, productRequest.getPageable());
+    Page<Product> products = productRepository.findAll(spec, pageable);
     List<ProductDTO> productDTOS = productMapper.getProductDTOs(products.getContent());
 
     ResultPaginationDTO resultPaginationDTO = ResultPaginationDTO.builder()
         .meta(
             Meta.builder()
-                .page(productRequest.getPageable().getPageNumber() + 1)
-                .pageSize(productRequest.getPageable().getPageSize())
+                .page(pageable.getPageNumber() + 1)
+                .pageSize(pageable.getPageSize())
                 .pages(products.getTotalPages())
                 .total(products.getTotalElements())
             .build()

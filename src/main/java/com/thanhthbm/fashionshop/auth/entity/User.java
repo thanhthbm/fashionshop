@@ -55,6 +55,8 @@ public class User implements UserDetails {
 
   private String verificationCode;
 
+  private String refreshToken;
+
   @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
   @ToString.Exclude
   private List<Address> addressList;

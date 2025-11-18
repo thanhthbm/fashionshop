@@ -7,10 +7,11 @@ import com.thanhthbm.fashionshop.entity.Product;
 import java.util.List;
 import java.util.UUID;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 
 public interface ProductService {
   public Product addProduct(ProductDTO product);
-  ResultPaginationDTO getAllProducts(ProductRequest productRequest);
+  ResultPaginationDTO getAllProducts(Specification<Product> spec, Pageable pageable);
 
   ProductDTO getProductBySlug(String slug, Pageable pageable);
 
