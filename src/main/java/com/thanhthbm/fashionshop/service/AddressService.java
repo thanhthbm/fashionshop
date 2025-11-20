@@ -22,11 +22,12 @@ public class AddressService {
   public Address createAddress(AddressRequest addressRequest, Principal principal) {
     com.thanhthbm.fashionshop.auth.entity.User user = (com.thanhthbm.fashionshop.auth.entity.User) userDetailsService.loadUserByUsername(principal.getName());
     Address address = Address.builder()
-        .state(addressRequest.getState())
-        .zipCode(addressRequest.getZipCode())
+        .receiverName(addressRequest.getReceiverName())
         .phoneNumber(addressRequest.getPhoneNumber())
-        .city(addressRequest.getCity())
-        .street(addressRequest.getStreet())
+        .detail(addressRequest.getDetail())
+        .ward(addressRequest.getWard())
+        .district(addressRequest.getDistrict())
+        .province(addressRequest.getProvince())
         .user(user)
         .build();
 

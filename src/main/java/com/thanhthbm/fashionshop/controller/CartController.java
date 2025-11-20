@@ -4,7 +4,7 @@ import com.thanhthbm.fashionshop.auth.entity.User;
 import com.thanhthbm.fashionshop.dto.ApiResponse;
 import com.thanhthbm.fashionshop.dto.CartItem;
 import com.thanhthbm.fashionshop.service.CartService;
-import jakarta.validation.Valid; // Spring Boot 3
+import jakarta.validation.Valid; 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -30,31 +30,31 @@ public class CartController {
   }
 
   @PostMapping("/add")
-  public ResponseEntity<ApiResponse<Void>> addToCart(
+  public ResponseEntity<ApiResponse<List<CartItem>>> addToCart(
       @AuthenticationPrincipal User user,
-      @RequestBody @Valid CartItem item // Thêm @Valid để check input
+      @RequestBody @Valid CartItem item
   ) {
-    cartService.addToCart(user.getId(), item);
-    return ResponseEntity.ok(ApiResponse.success(null));
+    List<CartItem> updatedCart = cartService.addToCart(user.getId(), item);
+    return ResponseEntity.ok(ApiResponse.success(updatedCart));
   }
 
   @PutMapping("/update/{variantId}")
-  public ResponseEntity<ApiResponse<Void>> updateQuantity(
+  public ResponseEntity<ApiResponse<List<CartItem>>> updateQuantity(
       @AuthenticationPrincipal User user,
       @PathVariable UUID variantId,
       @RequestParam Integer quantity
   ) {
-    cartService.updateQuantity(user.getId(), variantId, quantity);
-    return ResponseEntity.ok(ApiResponse.success(null));
+    List<CartItem> cartItems = cartService.updateQuantity(user.getId(), variantId, quantity);
+    return ResponseEntity.ok(ApiResponse.success(cartItems));
   }
 
   @DeleteMapping("/{variantId}")
-  public ResponseEntity<ApiResponse<Void>> removeFromCart(
+  public ResponseEntity<ApiResponse<List<CartItem>>> removeFromCart(
       @AuthenticationPrincipal User user,
       @PathVariable UUID variantId
   ) {
-    cartService.removeFromCart(user.getId(), variantId);
-    return ResponseEntity.ok(ApiResponse.success(null));
+    List<CartItem> updatedCart = cartService.removeFromCart(user.getId(), variantId);
+    return ResponseEntity.ok(ApiResponse.success(updatedCart));
   }
 
   @DeleteMapping("/clear")

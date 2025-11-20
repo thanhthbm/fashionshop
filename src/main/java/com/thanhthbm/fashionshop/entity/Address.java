@@ -30,19 +30,22 @@ public class Address {
   private UUID id;
 
   @Column(nullable = false)
-  private String street;
-
-  @Column(nullable = false)
-  private String city;
-
-  @Column(nullable = false)
-  private String state;
-
-  @Column(nullable = false)
-  private String zipCode;
+  private String receiverName;
 
   @Column(nullable = false)
   private String phoneNumber;
+
+  @Column(nullable = false)
+  private String detail;
+
+  @Column(nullable = false)
+  private String ward;
+
+  @Column(nullable = false)
+  private String district;
+
+  @Column(nullable = false)
+  private String province;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "user_id", nullable = false)
@@ -50,4 +53,8 @@ public class Address {
   @ToString.Exclude
   private User user;
 
+
+  public String getFullAddress() {
+    return String.format("%s, %s, %s, %s", detail, ward, district, province);
+  }
 }

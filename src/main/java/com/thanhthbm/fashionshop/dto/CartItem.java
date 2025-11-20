@@ -14,6 +14,7 @@ public class CartItem implements Serializable {
   private UUID productId;
   private UUID variantId;
   private String productName;
+  private String variantName;
   private Double price;
   @Min(value = 1, message = "Quantity must be at least 1")
   private Integer quantity;

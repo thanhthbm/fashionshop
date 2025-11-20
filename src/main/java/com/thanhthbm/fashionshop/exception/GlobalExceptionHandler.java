@@ -1,7 +1,7 @@
 package com.thanhthbm.fashionshop.exception;
 
 import com.thanhthbm.fashionshop.dto.ApiResponse;
-import lombok.extern.slf4j.Slf4j; // 1. Cần thêm thư viện logging (Lombok)
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -83,5 +83,17 @@ public class GlobalExceptionHandler {
     );
 
     return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+  }
+
+  @ExceptionHandler(IllegalArgumentException.class)
+  public ResponseEntity<ApiResponse<Object>> handleIllegalArgumentException(IllegalArgumentException ex) {
+    log.warn("Business logic error: {}", ex.getMessage());
+
+    ApiResponse<Object> response = ApiResponse.fail(
+        HttpStatus.BAD_REQUEST.value(),
+        ex.getMessage()
+    );
+
+    return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
   }
 }

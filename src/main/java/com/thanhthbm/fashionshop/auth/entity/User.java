@@ -2,6 +2,7 @@ package com.thanhthbm.fashionshop.auth.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.thanhthbm.fashionshop.entity.Address;
+import com.thanhthbm.fashionshop.entity.WishList;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -13,6 +14,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.util.Collection;
 import java.util.Date;
@@ -70,6 +72,9 @@ public class User implements UserDetails {
       inverseJoinColumns = @JoinColumn(referencedColumnName = "id")
   )
   private List<Authority> authorities;
+
+  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+  private List<WishList> wishLists;
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
