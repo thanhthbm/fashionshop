@@ -1,31 +1,34 @@
 package com.thanhthbm.fashionshop.service;
 
 import com.thanhthbm.fashionshop.auth.entity.User;
-import com.thanhthbm.fashionshop.auth.service.CustomUserDetailService;
 import com.thanhthbm.fashionshop.dto.AddressRequest;
 import com.thanhthbm.fashionshop.entity.Address;
 import com.thanhthbm.fashionshop.exception.ResourceNotFoundException;
 import com.thanhthbm.fashionshop.repository.AddressRepository;
-import java.security.Principal;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.security.Principal;
+import java.util.List;
+import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class AddressService {
 
-  @Autowired
-  private UserDetailsService userDetailsService;
+  private final UserDetailsService userDetailsService;
+  private final AddressRepository addressRepository;
 
-  @Autowired
-  private AddressRepository addressRepository;
-
-
+  @Transactional
   public Address createAddress(AddressRequest addressRequest, Principal principal) {
-    com.thanhthbm.fashionshop.auth.entity.User user = (com.thanhthbm.fashionshop.auth.entity.User) userDetailsService.loadUserByUsername(principal.getName());
+    User user = (User) userDetailsService.loadUserByUsername(principal.getName());
+
+    if (Boolean.TRUE.equals(addressRequest.getIsDefault())) {
+      addressRepository.resetAllDefaultAddresses(user.getId());
+    }
+
     Address address = Address.builder()
         .receiverName(addressRequest.getReceiverName())
         .phoneNumber(addressRequest.getPhoneNumber())
@@ -33,8 +36,11 @@ public class AddressService {
         .ward(addressRequest.getWard())
         .province(addressRequest.getProvince())
         .user(user)
-        .isDefault(false)
+        .isDefault(addressRequest.getIsDefault())
         .build();
+
+
+     if (addressRepository.countByUser(user) == 0) { address.setIsDefault(true); }
 
     return addressRepository.save(address);
   }
@@ -43,48 +49,41 @@ public class AddressService {
     return this.addressRepository.findAddressByUser(user);
   }
 
+  @Transactional
   public Address updateAddress(UUID addressId, AddressRequest addressRequest, User user) {
-    Optional<Address> addressOptional = addressRepository.findByUserAndId(user, addressId);
-    if (!addressOptional.isPresent()) {
-      throw new ResourceNotFoundException("Address not found");
+    Address address = addressRepository.findByUserAndId(user, addressId)
+        .orElseThrow(() -> new ResourceNotFoundException("Address not found"));
+
+    if (Boolean.TRUE.equals(addressRequest.getIsDefault())) {
+      addressRepository.resetAllDefaultAddresses(user.getId());
     }
 
-    Address address = addressOptional.get();
     address.setReceiverName(addressRequest.getReceiverName());
     address.setPhoneNumber(addressRequest.getPhoneNumber());
     address.setDetail(addressRequest.getDetail());
     address.setWard(addressRequest.getWard());
     address.setProvince(addressRequest.getProvince());
-    address.setUser(user);
+    address.setIsDefault(addressRequest.getIsDefault());
+
     return addressRepository.save(address);
   }
 
+  @Transactional
   public void deleteAddress(UUID addressId, User user) {
-    Optional<Address> addressOptional = addressRepository.findByUserAndId(user, addressId);
-    if (!addressOptional.isPresent()) {
-      throw new ResourceNotFoundException("Address not found");
-    }
+    Address address = addressRepository.findByUserAndId(user, addressId)
+        .orElseThrow(() -> new ResourceNotFoundException("Address not found"));
 
-    addressRepository.deleteById(addressId);
+    addressRepository.delete(address);
   }
 
+  @Transactional
   public void setDefaultAddress(UUID addressId, User user) {
-    Optional<Address> addressOptional = addressRepository.findByUserAndId(user, addressId);
-    if (!addressOptional.isPresent()) {
-      throw new ResourceNotFoundException("Address not found");
-    }
+    Address address = addressRepository.findByUserAndId(user, addressId)
+        .orElseThrow(() -> new ResourceNotFoundException("Address not found"));
 
-    List<Address> addresses = this.getAddresses(user);
+    addressRepository.resetAllDefaultAddresses(user.getId());
 
-    for (Address address : addresses) {
-      if (address.getId().equals(addressId)) {
-        address.setIsDefault(true);
-      }
-      else  {
-        address.setIsDefault(false);
-      }
-    }
-
-    this.addressRepository.saveAll(addresses);
+    address.setIsDefault(true);
+    addressRepository.save(address);
   }
 }

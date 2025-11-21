@@ -27,4 +27,6 @@ public class AddressRequest {
 
   @NotBlank(message = "Tỉnh/Thành phố không được để trống")
   private String province;
+
+  private Boolean isDefault;
 }
