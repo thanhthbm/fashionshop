@@ -2,6 +2,8 @@ package com.thanhthbm.fashionshop.auth.service;
 
 import com.thanhthbm.fashionshop.auth.entity.User;
 import com.thanhthbm.fashionshop.auth.repository.UserDetailRepository;
+import com.thanhthbm.fashionshop.entity.Address;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -29,4 +31,5 @@ public class CustomUserDetailService implements UserDetailsService {
   public User handleUpdateUser(User user) {
     return userDetailRepository.save(user);
   }
+
 }

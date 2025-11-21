@@ -42,7 +42,7 @@ public class Address {
   private String ward;
 
   @Column(nullable = false)
-  private String district;
+  private Boolean isDefault;
 
   @Column(nullable = false)
   private String province;
@@ -52,9 +52,4 @@ public class Address {
   @JsonIgnore
   @ToString.Exclude
   private User user;
-
-
-  public String getFullAddress() {
-    return String.format("%s, %s, %s, %s", detail, ward, district, province);
-  }
 }
