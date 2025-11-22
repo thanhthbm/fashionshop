@@ -61,6 +61,7 @@ public class User implements UserDetails {
 
   @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
   @ToString.Exclude
+  @JsonIgnore
   private List<Address> addressList;
 
   private boolean enabled = false;

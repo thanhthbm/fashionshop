@@ -4,12 +4,17 @@ import com.thanhthbm.fashionshop.auth.dto.UserDetailsDTO;
 import com.thanhthbm.fashionshop.auth.entity.User;
 import com.thanhthbm.fashionshop.auth.service.CustomUserDetailService;
 import com.thanhthbm.fashionshop.dto.ApiResponse;
+import com.thanhthbm.fashionshop.dto.UserProfileRequest;
+import jakarta.validation.Valid;
 import java.security.Principal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -34,8 +39,18 @@ public class UserDetailController {
         .id(user.getId())
         .phoneNumber(user.getPhoneNumber())
         .authorityList(user.getAuthorities().toArray())
-        .addressList(user.getAddressList())
         .build();
     return new ResponseEntity(ApiResponse.success(userDetailsDTO), HttpStatus.OK);
+  }
+
+  @PutMapping("/profile")
+  public ResponseEntity<ApiResponse<UserDetailsDTO>> updateUserProfile(@AuthenticationPrincipal User user,  @RequestBody
+      UserProfileRequest userProfileRequest) {
+
+    if (null == user){
+      return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+    }
+
+    return ResponseEntity.ok(ApiResponse.success(customUserDetailService.updateUserProfile(user, userProfileRequest)));
   }
 }

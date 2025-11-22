@@ -1,7 +1,9 @@
 package com.thanhthbm.fashionshop.auth.service;
 
+import com.thanhthbm.fashionshop.auth.dto.UserDetailsDTO;
 import com.thanhthbm.fashionshop.auth.entity.User;
 import com.thanhthbm.fashionshop.auth.repository.UserDetailRepository;
+import com.thanhthbm.fashionshop.dto.UserProfileRequest;
 import com.thanhthbm.fashionshop.entity.Address;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,4 +34,22 @@ public class CustomUserDetailService implements UserDetailsService {
     return userDetailRepository.save(user);
   }
 
+  public UserDetailsDTO updateUserProfile(User user, UserProfileRequest userProfileRequest) {
+    user.setFirstName(userProfileRequest.getFirstName());
+    user.setLastName(userProfileRequest.getLastName());
+
+    if (null != userProfileRequest.getPhoneNumber()) {
+      user.setPhoneNumber(userProfileRequest.getPhoneNumber());
+    }
+
+    this.userDetailRepository.save(user);
+
+    return UserDetailsDTO.builder()
+        .firstName(user.getFirstName())
+        .lastName(user.getLastName())
+        .email(user.getEmail())
+        .id(user.getId())
+        .phoneNumber(user.getPhoneNumber())
+        .build();
+  }
 }
