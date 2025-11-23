@@ -95,4 +95,13 @@ public class CartService {
     String key = getCartKey(userId);
     redisTemplate.delete(key);
   }
+
+  public void restoreCart(UUID userId, List<CartItem> items) {
+    String key = getCartKey(userId);
+    HashOperations<String, String, CartItem> hashOperations = redisTemplate.opsForHash();
+
+    for (CartItem item : items) {
+      hashOperations.put(key, item.getVariantId().toString(), item);
+    }
+  }
 }

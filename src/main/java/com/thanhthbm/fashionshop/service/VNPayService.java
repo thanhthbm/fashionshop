@@ -19,10 +19,9 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class VNPayService {
-  public String getVNPayPaymentUrl(int total, String orderInfor, String urlReturn){
+  public String getVNPayPaymentUrl(int total, String vnp_TxnRef, String urlReturn){
     String vnp_Version = "2.1.0";
     String vnp_Command = "pay";
-    String vnp_TxnRef = VNPayConfig.getRandomNumber(8);
     String vnp_IpAddr = "127.0.0.1";
     String vnp_TmnCode = VNPayConfig.vnp_TmnCode;
     String orderType = "order-type";
@@ -35,7 +34,7 @@ public class VNPayService {
     vnp_Params.put("vnp_CurrCode", "VND");
 
     vnp_Params.put("vnp_TxnRef", vnp_TxnRef);
-    vnp_Params.put("vnp_OrderInfo", orderInfor);
+    vnp_Params.put("vnp_OrderInfo", "Thanh toan hoa don");
     vnp_Params.put("vnp_OrderType", orderType);
 
     String locate = "vn";

@@ -4,6 +4,8 @@ import com.thanhthbm.fashionshop.auth.dto.UserDetailsDTO;
 import com.thanhthbm.fashionshop.auth.entity.User;
 import com.thanhthbm.fashionshop.auth.repository.UserDetailRepository;
 import com.thanhthbm.fashionshop.dto.User.UserProfileRequest;
+import java.util.Optional;
+import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -49,5 +51,9 @@ public class CustomUserDetailService implements UserDetailsService {
         .id(user.getId())
         .phoneNumber(user.getPhoneNumber())
         .build();
+  }
+
+  public Optional<User> findById(UUID id) {
+    return this.userDetailRepository.findById(id);
   }
 }
