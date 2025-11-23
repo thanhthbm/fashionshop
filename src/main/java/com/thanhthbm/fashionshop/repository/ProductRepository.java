@@ -1,6 +1,5 @@
 package com.thanhthbm.fashionshop.repository;
 
-import com.thanhthbm.fashionshop.dto.ProductDTO;
 import com.thanhthbm.fashionshop.entity.Product;
 import java.util.List;
 import java.util.UUID;

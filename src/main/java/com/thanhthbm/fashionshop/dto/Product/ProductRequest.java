@@ -1,4 +1,4 @@
-package com.thanhthbm.fashionshop.dto;
+package com.thanhthbm.fashionshop.dto.Product;
 
 import java.util.UUID;
 import lombok.AllArgsConstructor;

@@ -1,4 +1,4 @@
-package com.thanhthbm.fashionshop.dto;
+package com.thanhthbm.fashionshop.dto.User;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;

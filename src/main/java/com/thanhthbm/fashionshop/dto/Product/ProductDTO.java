@@ -1,4 +1,4 @@
-package com.thanhthbm.fashionshop.dto;
+package com.thanhthbm.fashionshop.dto.Product;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import java.math.BigDecimal;

@@ -1,4 +1,4 @@
-package com.thanhthbm.fashionshop.dto;
+package com.thanhthbm.fashionshop.dto.Format;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -1,14 +1,13 @@
-package com.thanhthbm.fashionshop.service;
+package com.thanhthbm.fashionshop.service.Product;
 
-import com.thanhthbm.fashionshop.dto.ProductDTO;
-import com.thanhthbm.fashionshop.dto.ProductRequest;
-import com.thanhthbm.fashionshop.dto.ResultPaginationDTO;
-import com.thanhthbm.fashionshop.dto.ResultPaginationDTO.Meta;
+import com.thanhthbm.fashionshop.dto.Product.ProductDTO;
+import com.thanhthbm.fashionshop.dto.Format.ResultPaginationDTO;
+import com.thanhthbm.fashionshop.dto.Format.ResultPaginationDTO.Meta;
 import com.thanhthbm.fashionshop.entity.Product;
 import com.thanhthbm.fashionshop.exception.ResourceNotFoundException;
 import com.thanhthbm.fashionshop.mapper.ProductMapper;
 import com.thanhthbm.fashionshop.repository.ProductRepository;
-import com.thanhthbm.fashionshop.specification.ProductSpecification;
+import com.thanhthbm.fashionshop.service.CategoryService;
 import java.util.List;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;

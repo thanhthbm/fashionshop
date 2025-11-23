@@ -33,7 +33,10 @@ public class OrderItem {
   @JsonIgnore
   private Product product;
 
-  private UUID productVariantId;
+
+  @ManyToOne
+  @JoinColumn(name = "product_variant_id")
+  private ProductVariant productVariant;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "order_id", nullable = false)

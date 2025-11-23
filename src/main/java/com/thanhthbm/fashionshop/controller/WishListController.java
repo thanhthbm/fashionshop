@@ -1,15 +1,14 @@
 package com.thanhthbm.fashionshop.controller;
 
 import com.thanhthbm.fashionshop.auth.entity.User;
-import com.thanhthbm.fashionshop.dto.ApiResponse;
-import com.thanhthbm.fashionshop.dto.ProductDTO;
+import com.thanhthbm.fashionshop.dto.Format.ApiResponse;
+import com.thanhthbm.fashionshop.dto.Product.ProductDTO;
 import com.thanhthbm.fashionshop.service.WishListService;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;

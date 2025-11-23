@@ -1,4 +1,4 @@
-package com.thanhthbm.fashionshop.dto;
+package com.thanhthbm.fashionshop.dto.Product;
 
 import java.util.UUID;
 import lombok.AllArgsConstructor;
@@ -10,9 +10,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class CategoryTypeDTO {
+public class ProductResourceDTO {
   private UUID id;
   private String name;
-  private String code;
-  private String description;
+  private String url;
+  private String type;
+  private Boolean isPrimary;
 }

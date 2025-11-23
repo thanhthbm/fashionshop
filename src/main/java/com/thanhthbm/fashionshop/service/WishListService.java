@@ -1,7 +1,7 @@
 package com.thanhthbm.fashionshop.service;
 
 import com.thanhthbm.fashionshop.auth.entity.User;
-import com.thanhthbm.fashionshop.dto.ProductDTO;
+import com.thanhthbm.fashionshop.dto.Product.ProductDTO;
 import com.thanhthbm.fashionshop.entity.Product;
 import com.thanhthbm.fashionshop.entity.WishList;
 import com.thanhthbm.fashionshop.exception.ResourceNotFoundException;

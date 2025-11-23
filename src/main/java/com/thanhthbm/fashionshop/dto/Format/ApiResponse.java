@@ -1,4 +1,4 @@
-package com.thanhthbm.fashionshop.dto;
+package com.thanhthbm.fashionshop.dto.Format;
 
 
 import com.fasterxml.jackson.annotation.JsonInclude;

@@ -1,8 +1,8 @@
 package com.thanhthbm.fashionshop.mapper;
 
-import com.thanhthbm.fashionshop.dto.ProductDTO;
-import com.thanhthbm.fashionshop.dto.ProductResourceDTO;
-import com.thanhthbm.fashionshop.dto.ProductVariantDTO;
+import com.thanhthbm.fashionshop.dto.Product.ProductDTO;
+import com.thanhthbm.fashionshop.dto.Product.ProductResourceDTO;
+import com.thanhthbm.fashionshop.dto.Product.ProductVariantDTO;
 import com.thanhthbm.fashionshop.entity.Category;
 import com.thanhthbm.fashionshop.entity.CategoryType;
 import com.thanhthbm.fashionshop.entity.Product;

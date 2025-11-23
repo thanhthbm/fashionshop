@@ -1,7 +1,7 @@
 package com.thanhthbm.fashionshop.service;
 
 import com.thanhthbm.fashionshop.auth.entity.User;
-import com.thanhthbm.fashionshop.dto.AddressRequest;
+import com.thanhthbm.fashionshop.dto.Address.AddressRequest;
 import com.thanhthbm.fashionshop.entity.Address;
 import com.thanhthbm.fashionshop.exception.ResourceNotFoundException;
 import com.thanhthbm.fashionshop.repository.AddressRepository;

@@ -1,4 +1,4 @@
-package com.thanhthbm.fashionshop.dto;
+package com.thanhthbm.fashionshop.dto.Cart;
 
 import jakarta.validation.constraints.Min;
 import java.io.Serializable;

@@ -1,7 +1,7 @@
 package com.thanhthbm.fashionshop.controller;
 
-import com.thanhthbm.fashionshop.dto.ApiResponse;
-import com.thanhthbm.fashionshop.dto.CategoryDTO;
+import com.thanhthbm.fashionshop.dto.Format.ApiResponse;
+import com.thanhthbm.fashionshop.dto.Product.CategoryDTO;
 import com.thanhthbm.fashionshop.entity.Category;
 import com.thanhthbm.fashionshop.service.CategoryService;
 import com.turkraft.springfilter.boot.Filter;
@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

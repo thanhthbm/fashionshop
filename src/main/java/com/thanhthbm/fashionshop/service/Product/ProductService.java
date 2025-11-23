@@ -1,8 +1,7 @@
-package com.thanhthbm.fashionshop.service;
+package com.thanhthbm.fashionshop.service.Product;
 
-import com.thanhthbm.fashionshop.dto.ProductDTO;
-import com.thanhthbm.fashionshop.dto.ProductRequest;
-import com.thanhthbm.fashionshop.dto.ResultPaginationDTO;
+import com.thanhthbm.fashionshop.dto.Product.ProductDTO;
+import com.thanhthbm.fashionshop.dto.Format.ResultPaginationDTO;
 import com.thanhthbm.fashionshop.entity.Product;
 import java.util.List;
 import java.util.UUID;

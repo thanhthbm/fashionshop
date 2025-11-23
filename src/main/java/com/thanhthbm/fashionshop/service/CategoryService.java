@@ -1,7 +1,7 @@
 package com.thanhthbm.fashionshop.service;
 
-import com.thanhthbm.fashionshop.dto.CategoryDTO;
-import com.thanhthbm.fashionshop.dto.CategoryTypeDTO;
+import com.thanhthbm.fashionshop.dto.Product.CategoryDTO;
+import com.thanhthbm.fashionshop.dto.Product.CategoryTypeDTO;
 import com.thanhthbm.fashionshop.entity.Category;
 import com.thanhthbm.fashionshop.entity.CategoryType;
 import com.thanhthbm.fashionshop.exception.ResourceNotFoundException;

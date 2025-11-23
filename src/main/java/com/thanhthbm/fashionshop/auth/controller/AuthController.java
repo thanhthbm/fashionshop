@@ -2,16 +2,13 @@ package com.thanhthbm.fashionshop.auth.controller;
 
 import com.thanhthbm.fashionshop.auth.config.JwtTokenHelper;
 import com.thanhthbm.fashionshop.auth.dto.LoginRequest;
-import com.thanhthbm.fashionshop.auth.dto.RefreshRequest;
 import com.thanhthbm.fashionshop.auth.dto.RegistrationRequest;
 import com.thanhthbm.fashionshop.auth.dto.RegistrationResponse;
 import com.thanhthbm.fashionshop.auth.dto.UserToken;
 import com.thanhthbm.fashionshop.auth.entity.User;
 import com.thanhthbm.fashionshop.auth.service.CustomUserDetailService;
 import com.thanhthbm.fashionshop.auth.service.RegistrationService;
-import com.thanhthbm.fashionshop.dto.ApiResponse;
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletResponse;
+import com.thanhthbm.fashionshop.dto.Format.ApiResponse;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -24,11 +21,9 @@ import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController

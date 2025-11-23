@@ -40,4 +40,6 @@ public class ProductVariant {
   @JsonIgnore
   private Product product;
 
+
+
 }

@@ -1,8 +1,8 @@
 package com.thanhthbm.fashionshop.controller;
 
 import com.thanhthbm.fashionshop.auth.entity.User;
-import com.thanhthbm.fashionshop.dto.AddressRequest;
-import com.thanhthbm.fashionshop.dto.ApiResponse;
+import com.thanhthbm.fashionshop.dto.Address.AddressRequest;
+import com.thanhthbm.fashionshop.dto.Format.ApiResponse;
 import com.thanhthbm.fashionshop.entity.Address;
 import com.thanhthbm.fashionshop.service.AddressService;
 import java.security.Principal;
@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController

@@ -1,8 +1,8 @@
 package com.thanhthbm.fashionshop.controller;
 
 import com.thanhthbm.fashionshop.auth.entity.User;
-import com.thanhthbm.fashionshop.dto.ApiResponse;
-import com.thanhthbm.fashionshop.dto.CartItem;
+import com.thanhthbm.fashionshop.dto.Format.ApiResponse;
+import com.thanhthbm.fashionshop.dto.Cart.CartItem;
 import com.thanhthbm.fashionshop.service.CartService;
 import jakarta.validation.Valid; 
 import lombok.RequiredArgsConstructor;

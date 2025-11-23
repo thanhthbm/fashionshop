@@ -1,6 +1,6 @@
 package com.thanhthbm.fashionshop.service;
 
-import com.thanhthbm.fashionshop.dto.CartItem;
+import com.thanhthbm.fashionshop.dto.Cart.CartItem;
 import com.thanhthbm.fashionshop.repository.ProductVariantRepository; // Nên dùng Repo trực tiếp để check lock
 import com.thanhthbm.fashionshop.entity.ProductVariant;
 import com.thanhthbm.fashionshop.exception.ResourceNotFoundException;
