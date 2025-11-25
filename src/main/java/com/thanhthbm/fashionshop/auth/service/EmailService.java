@@ -1,13 +1,14 @@
 package com.thanhthbm.fashionshop.auth.service;
 
 import com.thanhthbm.fashionshop.auth.entity.User;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ServerErrorException;
 
 @Service
 public class EmailService {
@@ -18,28 +19,29 @@ public class EmailService {
   private String sender;
 
   @Async
-  public void sendMail(User user) {
+  public void sendMail(User user, String otp) {
     String subject = "Verify your email";
     String senderName = "FashionShop";
-    String mailContent = "Hello" + user.getUsername() + ",\n";
-    mailContent += "<p>Your verification code is <b>" + user.getVerificationCode() + "</b></p>" + ",\n";
-    mailContent += "<p>Please enter this code to verify your email. </p>";
-    mailContent += "\n<br></br>";
-    mailContent += senderName;
+    // Nội dung HTML
+    String mailContent = "<p>Hello " + user.getUsername() + ",</p>";
+    mailContent += "<p>Your verification code is <b>" + otp + "</b></p>";
+    mailContent += "<p>Please enter this code to verify your email.</p>";
+    mailContent += "<br>";
+    mailContent += "<p>" + senderName + "</p>";
 
     try {
+      MimeMessage message = mailSender.createMimeMessage();
+      MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
 
-      SimpleMailMessage message = new SimpleMailMessage();
-      message.setFrom(sender);
-      message.setTo(user.getEmail());
-      message.setText(mailContent);
-      message.setSubject(subject);
+      helper.setFrom(sender);
+      helper.setTo(user.getEmail());
+      helper.setSubject(subject);
+      helper.setText(mailContent, true);
 
       mailSender.send(message);
 
-    } catch (Exception e) {
-      throw new ServerErrorException("Error sending email", null);
+    } catch (MessagingException e) {
+      throw new RuntimeException("Error sending email", e);
     }
-
   }
 }

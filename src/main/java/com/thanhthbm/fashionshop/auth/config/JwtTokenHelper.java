@@ -42,11 +42,11 @@ public class JwtTokenHelper {
 
   public String generateToken(String username) {
     return Jwts.builder()
-        .setIssuer(appName)
-        .setSubject(username)
-        .setIssuedAt(new Date())
-        .setExpiration(generateExpirationDate())
-        .signWith(getSigningKey(), SignatureAlgorithm.HS256)
+        .issuer(appName)
+        .subject(username)
+        .issuedAt(new Date())
+        .expiration(generateExpirationDate())
+        .signWith(getSigningKey())
         .compact();
   }
 
@@ -62,11 +62,11 @@ public class JwtTokenHelper {
 
   public String generateRefreshToken(String username) {
     return Jwts.builder()
-        .setIssuer(appName)
-        .setSubject(username)
-        .setIssuedAt(new Date())
-        .setExpiration(generateRefreshExpirationDate())
-        .signWith(getRefreshSigningKey(), SignatureAlgorithm.HS256)
+        .issuer(appName)
+        .subject(username)
+        .issuedAt(new Date())
+        .expiration(generateRefreshExpirationDate())
+        .signWith(getRefreshSigningKey())
         .compact();
   }
 

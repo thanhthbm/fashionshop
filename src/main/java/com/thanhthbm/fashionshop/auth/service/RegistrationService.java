@@ -53,8 +53,6 @@ public class RegistrationService {
       user.setAuthorities(authorityService.getUserAuthority());
       userDetailRepository.save(user);
 
-      //send mail
-      emailService.sendMail(user);
 
       return RegistrationResponse.builder()
           .code(200)

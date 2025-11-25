@@ -31,7 +31,7 @@ public class WebSecurityConfig {
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     http
-        .cors(Customizer.withDefaults()) // sẽ dùng CorsConfigurationSource bean
+        .cors(Customizer.withDefaults())
         .csrf(AbstractHttpConfigurer::disable)
         .authorizeHttpRequests(auth -> auth
             .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
@@ -52,7 +52,7 @@ public class WebSecurityConfig {
               }
             })
         )
-        .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
+        .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .addFilterBefore(new JwtAuthenticationFilter(userDetailsService, jwtTokenHelper),
             org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter.class);
 
