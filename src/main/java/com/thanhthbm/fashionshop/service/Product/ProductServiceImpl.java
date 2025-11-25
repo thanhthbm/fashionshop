@@ -15,6 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -91,14 +92,14 @@ public class ProductServiceImpl implements ProductService {
   }
 
   @Override
-  public Product updateProduct(ProductDTO productDTO) {
-    Product product = productRepository.findById(productDTO.getId()).orElseThrow(() -> new ResourceNotFoundException("Product not found"));
+  @Transactional
+  public Product updateProduct(UUID id, ProductDTO productDTO) {
+    Product existingProduct = productRepository.findById(id)
+        .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
 
-    if (null == product) {
-      throw new ResourceNotFoundException("Product not found");
-    }
+    productMapper.updateProductFromDTO(productDTO, existingProduct);
 
-    return productRepository.save(productMapper.mapToProductEntity(productDTO));
+    return productRepository.save(existingProduct);
   }
 
   @Override

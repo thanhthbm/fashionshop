@@ -58,12 +58,11 @@ public class Product {
   @Column( unique = true)
   private String slug;
 
-  @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+  @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<ProductVariant> productVariants;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "category_id", nullable = false)
-  @JsonIgnore
   private Category category;
 
   @ManyToOne(fetch = FetchType.LAZY)
@@ -71,7 +70,7 @@ public class Product {
   @JsonIgnore
   private CategoryType categoryType;
 
-  @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+  @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<Resources> resources;
 
   @Column(nullable = false, updatable = false)

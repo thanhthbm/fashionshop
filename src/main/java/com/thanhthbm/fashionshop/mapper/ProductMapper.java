@@ -56,6 +56,88 @@ public class ProductMapper {
     return product;
   }
 
+  public void updateProductFromDTO(ProductDTO dto, Product entity) {
+    entity.setName(dto.getName());
+    entity.setPrice(dto.getPrice());
+    entity.setDescription(dto.getDescription());
+    entity.setBrand(dto.getBrand());
+    entity.setIsNewArrival(dto.isNewArrival());
+    entity.setSlug(dto.getSlug());
+
+    if (entity.getCategory() == null || !entity.getCategory().getId().equals(dto.getCategoryId())) {
+      Category category = categoryService.getCategory(dto.getCategoryId());
+      entity.setCategory(category);
+    }
+    if (dto.getCategoryTypeId() != null) {
+      CategoryType type = entity.getCategory().getCategoryTypes().stream()
+          .filter(t -> t.getId().equals(dto.getCategoryTypeId()))
+          .findFirst().orElse(null);
+      entity.setCategoryType(type);
+    }
+
+    if (dto.getVariants() != null) {
+      List<ProductVariant> currentVariants = entity.getProductVariants();
+      List<ProductVariantDTO> incomingVariants = dto.getVariants();
+
+      currentVariants.removeIf(current ->
+          incomingVariants.stream().noneMatch(in -> in.getId() != null && in.getId().equals(current.getId()))
+      );
+
+      for (ProductVariantDTO in : incomingVariants) {
+        if (in.getId() == null) {
+          ProductVariant newV = ProductVariant.builder()
+              .color(in.getColor())
+              .size(in.getSize())
+              .stockQuantity(in.getStockQuantity())
+              .product(entity)
+              .build();
+          currentVariants.add(newV);
+        } else {
+          currentVariants.stream()
+              .filter(curr -> curr.getId().equals(in.getId()))
+              .findFirst()
+              .ifPresent(curr -> {
+                curr.setColor(in.getColor());
+                curr.setSize(in.getSize());
+                curr.setStockQuantity(in.getStockQuantity());
+              });
+        }
+      }
+    }
+
+    if (dto.getProductResources() != null) {
+      List<Resources> currentRes = entity.getResources();
+      List<ProductResourceDTO> incomingRes = dto.getProductResources();
+
+      currentRes.removeIf(current ->
+          incomingRes.stream().noneMatch(in -> in.getId() != null && in.getId().equals(current.getId()))
+      );
+
+      for (ProductResourceDTO in : incomingRes) {
+        if (in.getId() == null) {
+          Resources newRes = Resources.builder()
+              .name(in.getName())
+              .url(in.getUrl())
+              .type(in.getType())
+              .isPrimary(in.getIsPrimary())
+              .product(entity)
+              .build();
+          currentRes.add(newRes);
+        } else {
+          currentRes.stream()
+              .filter(curr -> curr.getId().equals(in.getId()))
+              .findFirst()
+              .ifPresent(curr -> {
+                curr.setName(in.getName());
+                curr.setUrl(in.getUrl());
+                curr.setIsPrimary(in.getIsPrimary());
+                curr.setType(in.getType());
+              });
+        }
+      }
+    }
+  }
+
   public List<Resources> mapToProductResources(List<ProductResourceDTO> productResources, Product product) {
 
     return productResources.stream().map(productResourceDTO -> {

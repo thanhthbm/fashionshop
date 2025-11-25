@@ -69,7 +69,7 @@ public class Order {
   @Temporal(TemporalType.TIMESTAMP)
   private Date expectedDeliveryDate;
 
-  @OneToMany(fetch = FetchType.LAZY, mappedBy = "order", cascade = CascadeType.ALL)
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
   @ToString.Exclude
   private List<OrderItem> orderItemList;
 

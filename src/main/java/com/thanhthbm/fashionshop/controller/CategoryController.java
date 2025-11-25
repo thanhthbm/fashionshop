@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,12 +34,13 @@ public class CategoryController {
 
 
   @GetMapping("/{id}")
-  public ResponseEntity<ApiResponse<Category>> getCategoryById(@RequestParam(value = "id") UUID id) {
+  public ResponseEntity<ApiResponse<Category>> getCategoryById(@PathVariable(value = "id") UUID id) {
     Category category = this.categoryService.getCategory(id);
     return ResponseEntity.ok().body(ApiResponse.success(category));
   }
 
   @PostMapping
+  @PreAuthorize("hasAuthority('ADMIN')")
   public ResponseEntity<ApiResponse<Category>> createCategory(@RequestBody CategoryDTO categoryDTO) {
     Category category = this.categoryService.createCategory(categoryDTO);
     return new ResponseEntity<>(ApiResponse.created(category), HttpStatus.CREATED);
@@ -53,12 +55,14 @@ public class CategoryController {
   }
 
   @PutMapping("/{id}")
+  @PreAuthorize("hasAuthority('ADMIN')")
   public ResponseEntity<ApiResponse<Category>> updateCategory(@PathVariable(value = "id") UUID categoryId, @RequestBody CategoryDTO categoryDTO) {
     Category category = categoryService.updateCategory(categoryDTO, categoryId);
     return new ResponseEntity<>(ApiResponse.success(category), HttpStatus.OK);
   }
 
   @DeleteMapping("/{id}")
+  @PreAuthorize("hasAuthority('ADMIN')")
   public ResponseEntity<ApiResponse<Void>> deleteCategory(@PathVariable(value = "id") UUID categoryId) {
     categoryService.deleteCategory(categoryId);
     return new ResponseEntity<>(ApiResponse.success(null), HttpStatus.OK);

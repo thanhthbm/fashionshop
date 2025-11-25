@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.UUID;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.transaction.annotation.Transactional;
 
 public interface ProductService {
   public Product addProduct(ProductDTO product);
@@ -16,7 +17,8 @@ public interface ProductService {
 
   ProductDTO getProductById(UUID id);
 
-  Product updateProduct(ProductDTO productDTO);
+  @Transactional
+  Product updateProduct(UUID id, ProductDTO productDTO);
 
   Product fetchProductById(UUID id);
 

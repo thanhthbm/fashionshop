@@ -6,9 +6,11 @@ import com.thanhthbm.fashionshop.config.VNPayConfig;
 import com.thanhthbm.fashionshop.constant.OrderStatus;
 import com.thanhthbm.fashionshop.constant.PaymentStatus;
 import com.thanhthbm.fashionshop.dto.Cart.CartItem;
+import com.thanhthbm.fashionshop.dto.Format.ResultPaginationDTO;
 import com.thanhthbm.fashionshop.dto.Mapper.OrderMapper;
 import com.thanhthbm.fashionshop.dto.Order.CheckoutRequest;
 import com.thanhthbm.fashionshop.dto.Order.OrderDTO;
+import com.thanhthbm.fashionshop.dto.Order.OrderItemDTO;
 import com.thanhthbm.fashionshop.dto.Order.OrderResponse;
 import com.thanhthbm.fashionshop.dto.Order.PendingOrderDTO;
 import com.thanhthbm.fashionshop.entity.Address;
@@ -25,6 +27,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -236,5 +241,61 @@ public class OrderService {
       // Vì đơn chưa tạo trong DB, Cart chưa xóa, Kho chưa trừ.
       // User quay lại trang web vẫn thấy Cart còn nguyên.
     }
+  }
+
+  public ResultPaginationDTO getAllOrdersAdmin(Specification<Order> spec, Pageable pageable) {
+    Page<Order> orders = orderRepository.findAll(spec, pageable);
+    List<OrderDTO> orderDTOS = orders.getContent().stream()
+        .map(orderMapper::toOrderDTO)
+        .collect(Collectors.toList());
+
+    return ResultPaginationDTO.builder()
+        .meta(ResultPaginationDTO.Meta.builder()
+            .page(pageable.getPageNumber() + 1)
+            .pageSize(pageable.getPageSize())
+            .pages(orders.getTotalPages())
+            .total(orders.getTotalElements())
+            .build())
+        .result(orderDTOS)
+        .build();
+  }
+
+  @Transactional
+  public OrderDTO updateOrderAdmin(UUID orderId, OrderDTO orderDTO) {
+    Order order = orderRepository.findById(orderId)
+        .orElseThrow(() -> new ResourceNotFoundException("Order not found"));
+
+    if (orderDTO.getOrderStatus() != null) {
+      order.setOrderStatus(orderDTO.getOrderStatus());
+    }
+
+    if (orderDTO.getOrderItems() != null) {
+      List<OrderItem> currentItems = order.getOrderItemList();
+      List<OrderItemDTO> incomingItems = orderDTO.getOrderItems();
+
+      currentItems.removeIf(curr ->
+          incomingItems.stream().noneMatch(in -> in.getId() != null && in.getId().equals(curr.getId()))
+      );
+
+      for (OrderItemDTO in : incomingItems) {
+        currentItems.stream()
+            .filter(curr -> curr.getId().equals(in.getId()))
+            .findFirst()
+            .ifPresent(curr -> {
+              if (!curr.getQuantity().equals(in.getQuantity())) {
+                curr.setQuantity(in.getQuantity());
+              }
+            });
+      }
+
+      double newTotal = currentItems.stream()
+          .mapToDouble(item -> item.getItemPrice() * item.getQuantity())
+          .sum();
+
+      order.setTotalAmount(newTotal);
+    }
+
+    Order savedOrder = orderRepository.save(order);
+    return orderMapper.toOrderDTO(savedOrder);
   }
 }
